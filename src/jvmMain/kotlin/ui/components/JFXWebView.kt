@@ -1,22 +1,18 @@
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.awt.SwingPanel
+package ui.components
+
+import data.MapCoordinates
 import javafx.application.Platform
-import javafx.concurrent.Worker
 import javafx.embed.swing.JFXPanel
 import javafx.event.Event
 import javafx.scene.Scene
 import javafx.scene.web.WebView
 
-/**
- * From, https://stackoverflow.com/a/26028556
- */
-class JFXWebView(private val onClick: (ObjectCoordinates) -> Unit) : JFXPanel() {
+class JFXWebView(private val onClick: (MapCoordinates) -> Unit) : JFXPanel() {
     init {
         Platform.runLater(::initialiseJavaFXScene)
     }
 
-    fun initialiseJavaFXScene() {
+    private fun initialiseJavaFXScene() {
         val webView = WebView()
         val webEngine = webView.engine
 
@@ -28,7 +24,7 @@ class JFXWebView(private val onClick: (ObjectCoordinates) -> Unit) : JFXPanel() 
 //            println("Latitude: $latitude | Longitude: $longitude")
 
             if (latitude != null && longitude != null) {
-                onClick(ObjectCoordinates(latitude, longitude))
+                onClick(MapCoordinates(latitude, longitude))
             }
         }
 
@@ -37,8 +33,3 @@ class JFXWebView(private val onClick: (ObjectCoordinates) -> Unit) : JFXPanel() 
         setScene(scene)
     }
 }
-
-data class ObjectCoordinates(
-    val latitude: Double,
-    val longitude: Double
-)

@@ -4,10 +4,13 @@ plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
     id("org.openjfx.javafxplugin") version "0.0.14"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.0"
 }
 
 group = "gpixel.weather.desktop"
 version = "1.0-SNAPSHOT"
+
+val ktor_version = "2.3.1"
 
 repositories {
     google()
@@ -17,7 +20,6 @@ repositories {
 
 kotlin {
     jvm {
-//        jvmToolchain(11)
         compilations.all {
             kotlinOptions {
                 jvmTarget = "11"
@@ -29,9 +31,12 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(compose.desktop.currentOs)
-//                implementation("org.openjfx:javafx-web:20.0.1")
-//                implementation("org.openjfx:javafx-controls:20.0.1")
-//                implementation("org.openjfx:javafx-graphics:20.0.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+
+                implementation("io.ktor:ktor-client-core:$ktor_version")
+                implementation("io.ktor:ktor-client-cio:$ktor_version")
+                implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
             }
         }
         val jvmTest by getting
