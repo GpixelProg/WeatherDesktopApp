@@ -16,6 +16,7 @@ class WeatherbitApiImpl : WeatherApiRepository {
 
         val data = result.data[0]
         return CurrentWeather(
+            lastUpdate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
             city = data.city_name ?: "",
             longitude = data.lon ?: 0.0,
             latitude = data.lat ?: 0.0,
@@ -66,6 +67,7 @@ class WeatherbitApiImpl : WeatherApiRepository {
         }
 
         return ForecastHourly(
+            lastUpdate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
             city = result.cityName,
             longitude = result.lon,
             latitude = result.lat,
@@ -105,6 +107,7 @@ class WeatherbitApiImpl : WeatherApiRepository {
         }
 
         return ForecastDaily(
+            lastUpdate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
             city = result.cityName,
             longitude = result.lon,
             latitude = result.lat,

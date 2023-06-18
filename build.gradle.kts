@@ -5,6 +5,7 @@ plugins {
     id("org.jetbrains.compose")
     id("org.openjfx.javafxplugin") version "0.0.14"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.0"
+    id("io.realm.kotlin") version "1.8.0"
 }
 
 group = "gpixel.weather.desktop"
@@ -22,7 +23,7 @@ kotlin {
     jvm {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "11"
+                jvmTarget = "18"
             }
             withJava()
         }
@@ -37,6 +38,11 @@ kotlin {
                 implementation("io.ktor:ktor-client-cio:$ktor_version")
                 implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+                implementation("ch.qos.logback:logback-classic:1.2.3")
+
+
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+                implementation("io.realm.kotlin:library-base:1.8.0")
             }
         }
         val jvmTest by getting
