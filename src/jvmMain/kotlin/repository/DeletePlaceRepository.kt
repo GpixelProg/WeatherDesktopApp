@@ -1,5 +1,7 @@
 package repository
 
+import data.MapCoordinates
+
 interface DeletePlaceRepository {
-    suspend fun delete()
+    suspend fun delete(coordinates: MapCoordinates)
 }

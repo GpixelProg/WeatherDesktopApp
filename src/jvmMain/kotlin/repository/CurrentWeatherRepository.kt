@@ -5,4 +5,6 @@ import data.api.model.CurrentWeather
 
 interface CurrentWeatherRepository {
     suspend fun getCurrentWeather(coordinates: MapCoordinates): CurrentWeather
+
+    suspend fun getAllCurrentWeather(): List<CurrentWeather>
 }
