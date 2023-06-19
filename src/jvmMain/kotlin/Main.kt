@@ -26,16 +26,20 @@ fun main() = application {
         val weatherApi: WeatherApiRepository = WeatherbitApiImpl()
 
         CoroutineScope(Job() + Dispatchers.Default).launch {
-            val currentWeather = weatherApi.getCurrentWeather(MapCoordinates(49.2175, 28.4820))
             val databaseWeather: DatabaseWeatherRepository = DatabaseWeatherImpl()
+
+            val currentWeather = weatherApi.getCurrentWeather(MapCoordinates(49.2175, 28.4820))
+            val forecastHourly = weatherApi.getForecastHourly(MapCoordinates(49.2175, 28.4820))
+            val forecastDaily = weatherApi.getForecastDaily(MapCoordinates(49.2175, 28.4820))
+
             databaseWeather.updateCurrentWeather(MapCoordinates(49.2175, 28.4820), currentWeather)
+            databaseWeather.updateForecastHourly(MapCoordinates(49.2175, 28.4820), forecastHourly)
+            databaseWeather.updateForecastDaily(MapCoordinates(49.2175, 28.4820), forecastDaily)
 
 //            println(currentWeather)
 
-//            val forecastHourly = weatherApi.getForecastHourly(MapCoordinates(49.2175, 28.4820))
 //            println(forecastHourly)
 
-//            val forecastDaily = weatherApi.getForecastDaily(MapCoordinates(49.2175, 28.4820))
 //            println(forecastDaily)
         }
 
@@ -51,7 +55,6 @@ fun main() = application {
                 },
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(10.dp)
             )
         }
     }
