@@ -20,7 +20,8 @@ class DatabaseWeatherImpl : DatabaseWeatherRepository {
             ForecastHourlyDB::class,
             ForecastDailyDB::class,
             HourlyWeatherDB::class,
-            DailyWeatherDB::class
+            DailyWeatherDB::class,
+            NotificationDB::class,
         ))
         Realm.open(config)
     }

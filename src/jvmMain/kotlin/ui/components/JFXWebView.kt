@@ -7,7 +7,7 @@ import javafx.event.Event
 import javafx.scene.Scene
 import javafx.scene.web.WebView
 
-class JFXWebView(private val onClick: (MapCoordinates) -> Unit) : JFXPanel() {
+class JFXWebView(private val onClick: (MapCoordinates) -> Unit, private val mapCoordinates: MapCoordinates? = null) : JFXPanel() {
     init {
         Platform.runLater(::initialiseJavaFXScene)
     }
@@ -28,7 +28,11 @@ class JFXWebView(private val onClick: (MapCoordinates) -> Unit) : JFXPanel() {
             }
         }
 
-        webEngine.load("https://gpixelprog.github.io/WebMap/")
+        val coordinates = if (mapCoordinates != null)
+            "?latitude=${mapCoordinates.latitude}&longitude=${mapCoordinates.longitude}"
+        else ""
+
+        webEngine.load("https://gpixelprog.github.io/WebMap/$coordinates")
         val scene = Scene(webView)
         setScene(scene)
     }

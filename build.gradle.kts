@@ -32,6 +32,8 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(compose.desktop.currentOs)
+                implementation("org.jetbrains.compose.material3:material3-desktop:1.2.1")
+
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
                 implementation("io.ktor:ktor-client-core:$ktor_version")
@@ -40,9 +42,14 @@ kotlin {
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
                 implementation("ch.qos.logback:logback-classic:1.2.3")
 
-
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
                 implementation("io.realm.kotlin:library-base:1.8.0")
+
+                val voyagerVersion = "1.0.0-rc05"
+                implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
+                implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
+
+                api("io.github.qdsfdhvh:image-loader:1.5.1")
             }
         }
         val jvmTest by getting

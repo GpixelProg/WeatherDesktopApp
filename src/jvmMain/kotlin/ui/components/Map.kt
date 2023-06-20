@@ -16,13 +16,14 @@ import javax.swing.SwingUtilities
 @Composable
 fun Map(
     onClick: (MapCoordinates) -> Unit,
+    coordinates: MapCoordinates? = null,
     modifier: Modifier,
 ) {
     val jfxWebViewRef = remember { Ref<JFXWebView>() }
     var webView by remember { mutableStateOf<JFXWebView?>(null) }
 
     DisposableEffect(Unit) {
-        val jfxWebView = JFXWebView(onClick)
+        val jfxWebView = JFXWebView(onClick, coordinates)
         jfxWebViewRef.value = jfxWebView
 
         onDispose {

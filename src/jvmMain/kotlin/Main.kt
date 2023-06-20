@@ -1,37 +1,32 @@
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import data.MapCoordinates
-import implementation.CurrentWeatherImpl
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import repository.CurrentWeatherRepository
-import ui.components.Map
+import androidx.compose.ui.window.rememberWindowState
+import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.transitions.FadeTransition
+import cafe.adriel.voyager.transitions.SlideTransition
+import features.databaseWeather
+import ui.HomeScreen
+import ui.WelcomeScreen
+import java.awt.Dimension
 
+@OptIn(ExperimentalAnimationApi::class)
 fun main() = application {
-    Window(onCloseRequest = ::exitApplication) {
+    Window(
+        onCloseRequest = ::exitApplication,
+        title = "Meteo",
+    ) {
+        window.minimumSize = Dimension(1200, 800)
 
-        var dataLocation by remember { mutableStateOf("") }
-
-        Column {
-
-            Text("Data location: $dataLocation")
-
-            Map(
-                onClick = { coordinates ->
-                    dataLocation = "Latitude: ${coordinates.latitude} | Longitude: ${coordinates.longitude}"
-                },
-                modifier = Modifier
-                    .fillMaxSize()
-            )
+        if (databaseWeather.getAllCurrentWeather().isEmpty()) {
+            Navigator(WelcomeScreen) {
+                SlideTransition(it)
+            }
+        } else {
+            Navigator(HomeScreen) {
+                FadeTransition(it)
+            }
         }
     }
 }

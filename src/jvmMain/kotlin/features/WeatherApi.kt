@@ -3,4 +3,4 @@ package features
 import implementation.WeatherbitApiImpl
 import repository.WeatherApiRepository
 
-val weatherApi: WeatherApiRepository = WeatherbitApiImpl()
+internal val weatherApi: WeatherApiRepository = WeatherbitApiImpl()
