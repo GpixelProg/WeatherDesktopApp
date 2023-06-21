@@ -28,7 +28,7 @@ fun Map(
 
         onDispose {
             // Закриття ресурсів
-            jfxWebViewRef.value = null
+//            jfxWebViewRef.value = null
         }
     }
 

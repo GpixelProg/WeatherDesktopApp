@@ -32,6 +32,8 @@ class JFXWebView(private val onClick: (MapCoordinates) -> Unit, private val mapC
             "?latitude=${mapCoordinates.latitude}&longitude=${mapCoordinates.longitude}"
         else ""
 
+        println("https://gpixelprog.github.io/WebMap/$coordinates")
+
         webEngine.load("https://gpixelprog.github.io/WebMap/$coordinates")
         val scene = Scene(webView)
         setScene(scene)

@@ -29,6 +29,7 @@ class CurrentWeatherImpl : CurrentWeatherRepository {
 
         try {
             currentWeatherDBList.forEach {
+                println("** DB current weather: $it")
                 currentWeather.add(weatherApi.getCurrentWeather(MapCoordinates(it.latitude, it.longitude)))
             }
         } catch (e: Exception) {

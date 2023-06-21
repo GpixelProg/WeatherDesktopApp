@@ -50,6 +50,8 @@ kotlin {
                 implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
 
                 api("io.github.qdsfdhvh:image-loader:1.5.1")
+
+                api(compose.materialIconsExtended)
             }
         }
         val jvmTest by getting
