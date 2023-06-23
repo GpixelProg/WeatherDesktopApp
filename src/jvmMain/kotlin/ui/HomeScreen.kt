@@ -11,19 +11,20 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChromeReaderMode
 import androidx.compose.material.icons.filled.Room
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import data.SourceData
+import data.TypeSource
 import data.api.model.CurrentWeather
 import data.api.model.ForecastDaily
 import data.api.model.ForecastHourly
@@ -111,7 +112,9 @@ object HomeScreen : Screen {
 
                         Row(
                             modifier = Modifier
-                                .clickable { screenModel.openMap() }
+                                .clickable {
+                                    screenModel.openMap()
+                                }
                                 .padding(12.dp)
                         ) {
                             Text(
@@ -137,10 +140,18 @@ object HomeScreen : Screen {
                         screenModel.selectedForecastHourly.value != null &&
                         screenModel.selectedForecastDaily.value != null) {
 
+                        screenModel.sourceConfigurator.value = InformantTrigger(
+                            currentWeather = screenModel.selectedCurrentWeather.value!!,
+                            forecastHourly = screenModel.selectedForecastHourly.value!!,
+                            forecastDaily = screenModel.selectedForecastDaily.value!!,
+                            sourceData = screenModel.sourceData.value,
+                        )
+
                         WeatherMain(
                             currentWeather = screenModel.selectedCurrentWeather.value!!,
                             forecastHourly = screenModel.selectedForecastHourly.value!!,
                             forecastDaily = screenModel.selectedForecastDaily.value!!,
+                            screenModel = screenModel
                         )
                     }
                 }
@@ -153,6 +164,7 @@ object HomeScreen : Screen {
         currentWeather: CurrentWeather,
         forecastHourly: ForecastHourly,
         forecastDaily: ForecastDaily,
+        screenModel: HomeScreenModel
     ) {
         val stateVertical = rememberScrollState(0)
 
@@ -184,7 +196,7 @@ object HomeScreen : Screen {
                         fontWeight = FontWeight.ExtraLight,
                         color = Color.White.copy(alpha = 1f),
                         modifier = Modifier
-                            .padding(start = 4.dp)
+                            .padding(start = 8.dp)
                             .align(Alignment.CenterHorizontally)
                     )
 
@@ -205,10 +217,14 @@ object HomeScreen : Screen {
                     currentWeather = currentWeather,
                     forecastHourly = forecastHourly,
                     lastUpdate = "Last update: ${currentWeather.lastUpdate.date.getDayOfWeekName()} " +
-                            "${currentWeather.lastUpdate.hour}:${currentWeather.lastUpdate.minute}" +
-                            if (currentWeather.lastUpdate.minute < 10) "0" else "",
+                            currentWeather.lastUpdate.time.toSting(),
                     onClick = {
-
+                        screenModel.hourlyWeatherPanelOnClick(it)
+                    },
+                    activeItemIndex = if (screenModel.sourceData.value.typeSource == TypeSource.HOURLY) {
+                        screenModel.sourceData.value.index ?: 0
+                    } else {
+                        0
                     }
                 )
 
@@ -216,11 +232,21 @@ object HomeScreen : Screen {
                     DailyWeatherPanel(
                         modifier = Modifier
                             .padding(top = 20.dp)
-                            .padding(horizontal = 24.dp),
+                            .padding(start = 24.dp),
                         forecastDaily = forecastDaily,
                         onClick = {
-
+                            screenModel.dailyWeatherPanelOnClick(it)
+                        },
+                        activeItemIndex = if (screenModel.sourceData.value.typeSource == TypeSource.DAILY) {
+                            screenModel.sourceData.value.index ?: 0
+                        } else {
+                            0
                         }
+                    )
+
+                    WeatherInfoGrid(
+                        modifier = Modifier.fillMaxWidth().height(500.dp),
+                        sourceConfigurator = screenModel.sourceConfigurator.value!!
                     )
                 }
             }

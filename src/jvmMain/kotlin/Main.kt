@@ -1,4 +1,5 @@
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application

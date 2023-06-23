@@ -20,6 +20,7 @@ import com.seiko.imageloader.rememberAsyncImagePainter
 import data.api.model.CurrentWeather
 import data.api.model.ForecastHourly
 import kotlinx.datetime.LocalTime
+import ui.theme.activeItemTextColor
 import ui.theme.hourlyPanelColor
 
 @Composable
@@ -27,8 +28,9 @@ fun HourlyWeatherPanel(
     currentWeather: CurrentWeather,
     forecastHourly: ForecastHourly,
     lastUpdate: String,
-    onClick: () -> Unit,
+    onClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
+    activeItemIndex: Int = 0,
 ) {
     Surface(
         modifier = modifier,
@@ -62,7 +64,7 @@ fun HourlyWeatherPanel(
                         time = currentWeather.lastUpdate.time,
                         temperature = currentWeather.temperature!!,
                         iconUrl = currentWeather.iconURL,
-                        onClick = onClick,
+                        onClick = { onClick(0) },
                         isNow = true,
                     )
 
@@ -71,7 +73,9 @@ fun HourlyWeatherPanel(
                             time = hourlyWeather.timestampLocal,
                             temperature = hourlyWeather.temperature!!,
                             iconUrl = hourlyWeather.iconURL,
-                            onClick = onClick,
+                            onClick = { onClick(index + 1) },
+                            activeColor = if (index + 1 == activeItemIndex) activeItemTextColor
+                            else Color.White,
                         )
                     }
                 }
@@ -92,14 +96,17 @@ fun HourlyWeatherItem(
     iconUrl: String,
     onClick: () -> Unit,
     isNow: Boolean = false,
+    activeColor: Color = Color.White,
 ) {
     Column(
-        modifier = Modifier.padding(horizontal = 12.dp)
+        modifier = Modifier
+            .padding(horizontal = 12.dp)
+            .clickable(onClick = onClick)
     ) {
         Text(
             text = if (isNow) "Now" else "${time.hour}",
-            fontSize = 12.sp,
-            color = Color.White.copy(alpha = 1f),
+            fontSize = 14.sp,
+            color = activeColor.copy(alpha = 1f),
             modifier = Modifier.padding(top = 5.dp).align(Alignment.CenterHorizontally)
         )
 
@@ -115,8 +122,8 @@ fun HourlyWeatherItem(
 
         Text(
             text = "${temperature}°",
-            fontSize = 14.sp,
-            color = Color.White.copy(alpha = 1f),
+            fontSize = 16.sp,
+            color = activeColor.copy(alpha = 1f),
             modifier = Modifier.padding(top = 12.dp).align(Alignment.CenterHorizontally)
         )
     }

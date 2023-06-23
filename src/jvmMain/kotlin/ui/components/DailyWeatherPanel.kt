@@ -1,6 +1,8 @@
 package ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
@@ -16,13 +18,15 @@ import com.seiko.imageloader.rememberAsyncImagePainter
 import data.api.model.DailyWeather
 import data.api.model.ForecastDaily
 import features.getDayOfWeekName
+import ui.theme.activeItemTextColor
 import ui.theme.hourlyPanelColor
 
 @Composable
 fun DailyWeatherPanel(
     forecastDaily: ForecastDaily,
-    onClick: () -> Unit,
+    onClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
+    activeItemIndex: Int = 0,
 ) {
     Surface(
         modifier = modifier.width(350.dp),
@@ -47,9 +51,11 @@ fun DailyWeatherPanel(
             forecastDaily.dailyWeather.forEachIndexed { index, it ->
                 DailyWeatherItem(
                     dailyWeather = it,
-                    onClick = onClick,
+                    onClick = { onClick(index) },
                     modifier = Modifier.padding(vertical = 5.dp),
                     isToday = index == 0,
+                    activeColor = if (index == activeItemIndex && index != 0) activeItemTextColor
+                    else Color.White,
                 )
             }
         }
@@ -62,11 +68,13 @@ fun DailyWeatherItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isToday: Boolean = false,
+    activeColor: Color = Color.White,
 ) {
     Row (
         modifier = Modifier
             .padding(horizontal = 5.dp, vertical = 5.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { onClick() },
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(
@@ -74,9 +82,10 @@ fun DailyWeatherItem(
             else dailyWeather.datestampLocal.getDayOfWeekName().substring(0, 3),
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
-            color = Color.White.copy(alpha = 1f),
+            color = activeColor.copy(alpha = 1f),
             modifier = Modifier
                 .align(Alignment.CenterVertically)
+                .width(60.dp)
         )
 
         val painter = rememberAsyncImagePainter(dailyWeather.iconURL)
@@ -88,12 +97,12 @@ fun DailyWeatherItem(
                 .align(Alignment.CenterVertically)
         )
 
-        Row {
+        Row(Modifier.align(Alignment.CenterVertically)) {
             Text(
                 text = "${dailyWeather.minTemperature}°",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
-                color = Color.White.copy(alpha = 0.5f),
+                color = activeColor.copy(alpha = 0.5f),
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
             )
@@ -110,7 +119,7 @@ fun DailyWeatherItem(
                 text = "${dailyWeather.maxTemperature}°",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
-                color = Color.White.copy(alpha = 1f),
+                color = activeColor.copy(alpha = 1f),
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
             )

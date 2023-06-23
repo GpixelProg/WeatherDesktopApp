@@ -6,6 +6,8 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import cafe.adriel.voyager.navigator.Navigator
 import data.MapCoordinates
 import data.Preferences
+import data.SourceData
+import data.TypeSource
 import data.api.model.CurrentWeather
 import data.api.model.ForecastDaily
 import data.api.model.ForecastHourly
@@ -15,6 +17,7 @@ import features.forecastDaily
 import features.forecastHourly
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import repository.SourceConfiguratorRepository
 import ui.SelectLocScreen
 
 class HomeScreenModel(private val navigator: Navigator) : ScreenModel {
@@ -22,6 +25,8 @@ class HomeScreenModel(private val navigator: Navigator) : ScreenModel {
     var selectedCurrentWeather = mutableStateOf<CurrentWeather?>(null)
     var selectedForecastHourly = mutableStateOf<ForecastHourly?>(null)
     var selectedForecastDaily = mutableStateOf<ForecastDaily?>(null)
+    var sourceData = mutableStateOf<SourceData>(SourceData(typeSource = TypeSource.DEFAULT, index = null))
+    var sourceConfigurator = mutableStateOf<SourceConfiguratorRepository?>(null)
 
     init {
         coroutineScope.launch {
@@ -52,6 +57,20 @@ class HomeScreenModel(private val navigator: Navigator) : ScreenModel {
                 delay(Preferences.FORECAST_TIMEOUT)
             }
         }
+    }
+
+    fun hourlyWeatherPanelOnClick(index: Int) {
+        sourceData.value = SourceData(
+            typeSource = if (index == 0) TypeSource.DEFAULT else TypeSource.HOURLY,
+            index = index,
+        )
+    }
+
+    fun dailyWeatherPanelOnClick(index: Int) {
+        sourceData.value = SourceData(
+            typeSource = if (index == 0) TypeSource.DEFAULT else TypeSource.DAILY,
+            index = index,
+        )
     }
 
     fun loadAllCurrentWeather() {

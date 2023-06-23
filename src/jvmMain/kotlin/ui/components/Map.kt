@@ -23,12 +23,14 @@ fun Map(
     var webView by remember { mutableStateOf<JFXWebView?>(null) }
 
     DisposableEffect(Unit) {
+        println("Disposable")
         val jfxWebView = JFXWebView(onClick, coordinates)
         jfxWebViewRef.value = jfxWebView
 
         onDispose {
             // Закриття ресурсів
-//            jfxWebViewRef.value = null
+            jfxWebViewRef.value = null
+            println("onDispose")
         }
     }
 

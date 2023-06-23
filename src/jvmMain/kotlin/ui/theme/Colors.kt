@@ -9,3 +9,4 @@ val backgroundGradient = Brush.verticalGradient(
 
 val panelColor = Color(0xFF285A91)
 val hourlyPanelColor = Color(0xFF1A5FAB).copy(alpha = 0.7f)
+val activeItemTextColor = Color(0xFFFF7A00)

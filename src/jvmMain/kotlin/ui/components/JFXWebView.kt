@@ -9,7 +9,10 @@ import javafx.scene.web.WebView
 
 class JFXWebView(private val onClick: (MapCoordinates) -> Unit, private val mapCoordinates: MapCoordinates? = null) : JFXPanel() {
     init {
-        Platform.runLater(::initialiseJavaFXScene)
+        Platform.runLater {
+            println("Platform.runLater")
+            initialiseJavaFXScene()
+        }
     }
 
     private fun initialiseJavaFXScene() {
