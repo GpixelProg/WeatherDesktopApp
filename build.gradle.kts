@@ -68,7 +68,15 @@ compose.desktop {
             packageVersion = "1.0.0"
 
             linux {
+                iconFile.set(project.file("weather.png"))
+            }
 
+            windows {
+//                iconFile.set(project.file("weather.ico"))
+            }
+
+            macOS {
+                iconFile.set(project.file("weather.png"))
             }
         }
     }

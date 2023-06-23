@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.rememberTrayState
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -28,6 +29,7 @@ import data.TypeSource
 import data.api.model.CurrentWeather
 import data.api.model.ForecastDaily
 import data.api.model.ForecastHourly
+import features.NotificationSender
 import features.getDayOfWeekName
 import screen_model.HomeScreenModel
 import ui.components.*
@@ -53,6 +55,8 @@ object HomeScreen : Screen {
             screenModel.loadAllCurrentWeather()
         }
 
+        NotificationSender(screenModel.allCurrentWeather.value)
+
         VerticalSplittable(
             modifier = Modifier.fillMaxSize(),
             splitterState = panelState.splitter,
@@ -64,6 +68,8 @@ object HomeScreen : Screen {
                 modifier = Modifier.width(animatedSize).fillMaxHeight(),
                 state = panelState
             ) {
+                if (screenModel.allCurrentWeather.value.isEmpty()) LoadingCircle()
+
                 LazyColumn(modifier = Modifier.fillMaxSize().padding(top = 16.dp)) {
                     items(screenModel.allCurrentWeather.value) { currentWeather ->
 
@@ -153,6 +159,8 @@ object HomeScreen : Screen {
                             forecastDaily = screenModel.selectedForecastDaily.value!!,
                             screenModel = screenModel
                         )
+                    } else {
+                        LoadingCircle()
                     }
                 }
             }
