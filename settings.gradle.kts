@@ -9,7 +9,6 @@ pluginManagement {
     plugins {
         kotlin("multiplatform").version(extra["kotlin.version"] as String)
         id("org.jetbrains.compose").version(extra["compose.version"] as String)
-//        id("org.openjfx.javafxplugin") version "0.0.14"
     }
 }
 

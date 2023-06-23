@@ -1,22 +1,21 @@
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.awt.SwingPanel
+package ui.components
+
+import data.MapCoordinates
 import javafx.application.Platform
-import javafx.concurrent.Worker
 import javafx.embed.swing.JFXPanel
 import javafx.event.Event
 import javafx.scene.Scene
 import javafx.scene.web.WebView
 
-/**
- * From, https://stackoverflow.com/a/26028556
- */
-class JFXWebView(private val onClick: (ObjectCoordinates) -> Unit) : JFXPanel() {
+class JFXWebView(private val onClick: (MapCoordinates) -> Unit, private val mapCoordinates: MapCoordinates? = null) : JFXPanel() {
     init {
-        Platform.runLater(::initialiseJavaFXScene)
+        Platform.runLater {
+            println("Platform.runLater")
+            initialiseJavaFXScene()
+        }
     }
 
-    fun initialiseJavaFXScene() {
+    private fun initialiseJavaFXScene() {
         val webView = WebView()
         val webEngine = webView.engine
 
@@ -28,17 +27,18 @@ class JFXWebView(private val onClick: (ObjectCoordinates) -> Unit) : JFXPanel() 
 //            println("Latitude: $latitude | Longitude: $longitude")
 
             if (latitude != null && longitude != null) {
-                onClick(ObjectCoordinates(latitude, longitude))
+                onClick(MapCoordinates(latitude, longitude))
             }
         }
 
-        webEngine.load("https://gpixelprog.github.io/WebMap/")
+        val coordinates = if (mapCoordinates != null)
+            "?latitude=${mapCoordinates.latitude}&longitude=${mapCoordinates.longitude}"
+        else ""
+
+        println("https://gpixelprog.github.io/WebMap/$coordinates")
+
+        webEngine.load("https://gpixelprog.github.io/WebMap/$coordinates")
         val scene = Scene(webView)
         setScene(scene)
     }
 }
-
-data class ObjectCoordinates(
-    val latitude: Double,
-    val longitude: Double
-)

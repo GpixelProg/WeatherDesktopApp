@@ -4,10 +4,14 @@ plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
     id("org.openjfx.javafxplugin") version "0.0.14"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.0"
+    id("io.realm.kotlin") version "1.8.0"
 }
 
 group = "gpixel.weather.desktop"
 version = "1.0-SNAPSHOT"
+
+val ktor_version = "2.3.1"
 
 repositories {
     google()
@@ -17,10 +21,9 @@ repositories {
 
 kotlin {
     jvm {
-//        jvmToolchain(11)
         compilations.all {
             kotlinOptions {
-                jvmTarget = "11"
+                jvmTarget = "18"
             }
             withJava()
         }
@@ -29,9 +32,26 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(compose.desktop.currentOs)
-//                implementation("org.openjfx:javafx-web:20.0.1")
-//                implementation("org.openjfx:javafx-controls:20.0.1")
-//                implementation("org.openjfx:javafx-graphics:20.0.1")
+                implementation("org.jetbrains.compose.material3:material3-desktop:1.2.1")
+
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+
+                implementation("io.ktor:ktor-client-core:$ktor_version")
+                implementation("io.ktor:ktor-client-cio:$ktor_version")
+                implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+                implementation("ch.qos.logback:logback-classic:1.2.3")
+
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+                implementation("io.realm.kotlin:library-base:1.8.0")
+
+                val voyagerVersion = "1.0.0-rc05"
+                implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
+                implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
+
+                api("io.github.qdsfdhvh:image-loader:1.5.1")
+
+                api(compose.materialIconsExtended)
             }
         }
         val jvmTest by getting
@@ -48,7 +68,15 @@ compose.desktop {
             packageVersion = "1.0.0"
 
             linux {
+                iconFile.set(project.file("weather.png"))
+            }
 
+            windows {
+//                iconFile.set(project.file("weather.ico"))
+            }
+
+            macOS {
+                iconFile.set(project.file("weather.png"))
             }
         }
     }
