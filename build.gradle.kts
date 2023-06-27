@@ -23,7 +23,7 @@ kotlin {
     jvm {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "18"
+                jvmTarget = "17"
             }
             withJava()
         }
@@ -78,6 +78,8 @@ compose.desktop {
             macOS {
                 iconFile.set(project.file("weather.png"))
             }
+
+            appResourcesRootDir.set(project.layout.projectDirectory.dir("resources"))
         }
     }
 }

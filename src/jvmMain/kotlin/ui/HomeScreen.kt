@@ -18,13 +18,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.rememberTrayState
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import data.SourceData
 import data.TypeSource
 import data.api.model.CurrentWeather
 import data.api.model.ForecastDaily
@@ -34,6 +31,7 @@ import features.getDayOfWeekName
 import screen_model.HomeScreenModel
 import ui.components.*
 import ui.theme.backgroundGradient
+import utils.toSting
 
 object HomeScreen : Screen {
     @Composable

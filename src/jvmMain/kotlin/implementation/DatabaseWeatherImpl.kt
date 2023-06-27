@@ -12,10 +12,11 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import repository.DatabaseWeatherRepository
+import utils.getCacheDir
 
 class DatabaseWeatherImpl : DatabaseWeatherRepository {
     private val realm by lazy {
-        val config = RealmConfiguration.create(schema = setOf(
+        val config = RealmConfiguration.Builder(schema = setOf(
             CurrentWeatherDB::class,
             ForecastHourlyDB::class,
             ForecastDailyDB::class,
@@ -23,6 +24,9 @@ class DatabaseWeatherImpl : DatabaseWeatherRepository {
             DailyWeatherDB::class,
             NotificationDB::class,
         ))
+            .name("weather.realm")
+            .directory("${getCacheDir()}/database")
+            .build()
         Realm.open(config)
     }
 
