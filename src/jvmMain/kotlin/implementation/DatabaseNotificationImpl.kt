@@ -5,12 +5,16 @@ import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 import io.realm.kotlin.ext.query
 import repository.DatabaseNotificationRepository
+import utils.getCacheDir
 
 class DatabaseNotificationImpl : DatabaseNotificationRepository {
     private val realm by lazy {
-        val config = RealmConfiguration.create(schema = setOf(
-            NotificationDB::class,
-        ))
+        val config = RealmConfiguration.Builder(
+            schema = setOf(NotificationDB::class)
+        )
+            .name("notification.realm")
+            .directory("${getCacheDir()}/database")
+            .build()
         Realm.open(config)
     }
 

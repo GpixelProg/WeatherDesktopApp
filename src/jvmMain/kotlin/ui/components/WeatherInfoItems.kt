@@ -16,7 +16,8 @@ import androidx.compose.ui.unit.sp
 import kotlinx.datetime.LocalTime
 import repository.SourceConfiguratorRepository
 import ui.theme.hourlyPanelColor
-import java.util.*
+import utils.roundToDecimalPlaces
+import utils.toSting
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -144,7 +145,7 @@ private fun Pressure(
     ) {
         Column(modifier = Modifier.align(Alignment.Center)) {
             Text(
-                text = "${sourceConfigurator.pressure.value}",
+                text = "${(sourceConfigurator.pressure.value as Double).toInt()}",
                 fontSize = 32.sp,
                 color = sourceConfigurator.pressure.activeColor,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -169,7 +170,7 @@ private fun Humidity(
         titleColor = sourceConfigurator.humidity.activeColor
     ) {
         Text(
-            text = "${sourceConfigurator.humidity.value}%",
+            text = "${(sourceConfigurator.humidity.value as Double).toInt()}%",
             fontSize = 32.sp,
             color = sourceConfigurator.humidity.activeColor,
             modifier = Modifier.align(Alignment.Center)
@@ -247,7 +248,7 @@ private fun Wind(
     ) {
         Column(Modifier.align(Alignment.TopStart).padding(top = 10.dp)) {
             Text(
-                text = "${sourceConfigurator.windSpeed.value}",
+                text = "${(sourceConfigurator.windSpeed.value as Double).roundToDecimalPlaces(1)}",
                 fontSize = 32.sp,
                 color = sourceConfigurator.windSpeed.activeColor,
                 modifier = Modifier
@@ -263,7 +264,7 @@ private fun Wind(
 
         Text(
             text = sourceConfigurator.windDirectionFull.value.toString()
-                .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() },
+                .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() },
             fontSize = 16.sp,
             color = sourceConfigurator.windDirectionFull.activeColor,
             modifier = Modifier.align(Alignment.BottomStart).padding(bottom = 10.dp)
@@ -281,7 +282,7 @@ private fun Rainfall(
     ) {
         Column(Modifier.align(Alignment.Center)) {
             Text(
-                text = "${sourceConfigurator.rainfall.value}",
+                text = "${(sourceConfigurator.rainfall.value as Double).roundToDecimalPlaces(1)}",
                 fontSize = 32.sp,
                 color = sourceConfigurator.rainfall.activeColor,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -307,7 +308,7 @@ private fun Visibility(
     ) {
         Column(Modifier.align(Alignment.Center)) {
             Text(
-                text = "${sourceConfigurator.visibility.value}",
+                text = "${(sourceConfigurator.visibility.value as Double).roundToDecimalPlaces(1)}",
                 fontSize = 32.sp,
                 color = sourceConfigurator.visibility.activeColor,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
